@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import LetterReader from "@/components/LetterReader";
 
 const BIRTH_DATE = "2004-06-15";
+
 const BIRTHDAY_CONTENT = `Dear Santhi,
 
 Happy Birthday.
@@ -21,15 +22,23 @@ Thank you for being in this world. It is better because you are in it.
 With all my love, always,
 Kingsuk`;
 
-function getAge(birthDate: string): number {
+function getNextBirthday(birthDate: string): { date: Date; age: number } {
   const birth = new Date(birthDate);
-  const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-  const m = today.getMonth() - birth.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-    age--;
+  const now = new Date();
+  const year = now.getFullYear();
+  const next = new Date(birth);
+  next.setFullYear(year);
+  if (next <= now) {
+    next.setFullYear(year + 1);
   }
-  return age;
+  const age = next.getFullYear() - birth.getFullYear();
+  return { date: next, age };
+}
+
+function isBirthdayToday(birthDate: string): boolean {
+  const birth = new Date(birthDate);
+  const now = new Date();
+  return now.getMonth() === birth.getMonth() && now.getDate() === birth.getDate();
 }
 
 function ordinal(n: number): string {
@@ -38,54 +47,115 @@ function ordinal(n: number): string {
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
+function calcTimeLeft(target: Date) {
+  const diff = target.getTime() - Date.now();
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  return {
+    days: Math.floor(diff / 86400000),
+    hours: Math.floor((diff % 86400000) / 3600000),
+    minutes: Math.floor((diff % 3600000) / 60000),
+    seconds: Math.floor((diff % 60000) / 1000),
+  };
+}
+
 export default function BirthdayVaultPage() {
   const [reading, setReading] = useState(false);
-  const currentAge = useMemo(() => getAge(BIRTH_DATE), []);
+  const [timeLeft, setTimeLeft] = useState(() => calcTimeLeft(getNextBirthday(BIRTH_DATE).date));
 
-  const letter = {
+  const birthdayToday = useMemo(() => isBirthdayToday(BIRTH_DATE), []);
+  const next = useMemo(() => getNextBirthday(BIRTH_DATE), []);
+
+  useEffect(() => {
+    if (birthdayToday) return;
+    const timer = setInterval(() => {
+      setTimeLeft(calcTimeLeft(next.date));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [birthdayToday, next.date]);
+
+  const letter = useMemo(() => ({
     id: "birthday",
-    title: `${ordinal(currentAge)} Birthday`,
-    description: `Your ${ordinal(currentAge)} birthday letter from Kingsuk.`,
-    content: `Happy ${ordinal(currentAge)} Birthday, Santhi.\n\n${BIRTHDAY_CONTENT}`,
+    title: `${ordinal(next.age)} Birthday`,
+    description: `Your ${ordinal(next.age)} birthday letter from Kingsuk.`,
+    content: `Happy ${ordinal(next.age)} Birthday, Santhi.\n\n${BIRTHDAY_CONTENT}`,
     category: "birthday" as const,
     order: 100,
-  };
+  }), [next.age]);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <div className="mb-8">
         <h1 className="text-2xl font-heading text-text">Birthday Vault</h1>
         <p className="text-sm text-secondary mt-1">
-          A letter that updates every year on your birthday.
+          A letter that unlocks every year on your birthday.
         </p>
       </div>
 
       <div className="bg-card border border-accent/20 rounded-lg p-8 mb-8 text-center">
-        <p className="text-accent font-heading text-lg mb-1">Current Age</p>
-        <p className="text-5xl font-heading text-text">{currentAge}</p>
-        <p className="text-sm text-secondary mt-2">Born {new Date(BIRTH_DATE).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
+        {birthdayToday ? (
+          <p className="text-3xl font-heading text-accent animate-glow inline-block px-6 py-3 rounded-lg">
+            Happy Birthday!
+          </p>
+        ) : (
+          <>
+            <p className="text-accent font-heading text-lg mb-4">Next Birthday In</p>
+            <div className="grid grid-cols-4 gap-3 max-w-xs mx-auto">
+              {[
+                { label: "Days", value: timeLeft.days },
+                { label: "Hours", value: timeLeft.hours },
+                { label: "Minutes", value: timeLeft.minutes },
+                { label: "Seconds", value: timeLeft.seconds },
+              ].map((unit) => (
+                <div key={unit.label}>
+                  <p className="text-3xl font-heading text-text">{String(unit.value).padStart(2, "0")}</p>
+                  <p className="text-xs text-secondary mt-1">{unit.label}</p>
+                </div>
+              ))}
+            </div>
+            <p className="text-sm text-secondary mt-4">
+              Turning <span className="text-accent">{ordinal(next.age)}</span> on {next.date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+            </p>
+          </>
+        )}
       </div>
 
       <button
-        onClick={() => setReading(true)}
-        className="bg-card border border-accent/20 hover:border-accent/50 rounded-lg p-6 w-full text-left transition-all duration-300 group cursor-pointer"
+        onClick={() => birthdayToday && setReading(true)}
+        disabled={!birthdayToday}
+        className={`bg-card border rounded-lg p-6 w-full text-left transition-all duration-300 group ${
+          birthdayToday
+            ? "border-accent animate-glow hover:border-accent cursor-pointer"
+            : "border-accent/10 opacity-60 cursor-not-allowed"
+        }`}
       >
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-heading text-text group-hover:text-accent transition-colors">
-              {ordinal(currentAge)} Birthday Letter
-            </h3>
+            <div className="flex items-center gap-2">
+              {!birthdayToday && (
+                <svg className="w-4 h-4 text-secondary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+              )}
+              <h3 className={`font-heading ${birthdayToday ? "text-text group-hover:text-accent" : "text-secondary"}`}>
+                {ordinal(next.age)} Birthday Letter
+              </h3>
+            </div>
             <p className="text-sm text-secondary mt-1">
-              Open this on your birthday. The age updates every year.
+              {birthdayToday
+                ? "Your birthday letter is ready. Open it now."
+                : `Unlocks on ${next.date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`}
             </p>
           </div>
-          <span className="text-accent text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-            Open &rarr;
-          </span>
+          {birthdayToday && (
+            <span className="text-accent text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+              Open &rarr;
+            </span>
+          )}
         </div>
       </button>
 
-      {reading && (
+      {reading && birthdayToday && (
         <LetterReader
           letter={letter}
           onClose={() => setReading(false)}
