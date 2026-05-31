@@ -2,7 +2,7 @@
 
 A collection of letters written across time.
 
-A lifetime digital archive of letters, messages, memories, encouragement, and future notes from Kingsuk to Santhi.
+A lifetime digital archive of letters, messages, memories, encouragement, and future notes from a brother to his sister.
 
 ## Project Overview
 
