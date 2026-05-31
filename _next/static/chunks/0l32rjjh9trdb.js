@@ -68,7 +68,7 @@ Feel what you need to feel. Cry if you need to. Be angry. Be sad. Don't skip the
 
 And until then, I've got your back. From wherever I am.
 
-Yours,
+Your bro among bros, not made for hoes,
 Kingsuk`},{id:"when-you-feel-misunderstood",title:"When You Feel Misunderstood",description:"For when the world doesn't seem to get you.",category:"letter",order:5,content:`Dear Santhi,
 
 Being misunderstood is one of the loneliest feelings in the world.
