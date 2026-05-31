@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import LetterReader from "@/components/LetterReader";
 
-const BIRTH_DATE = "1994-06-15";
+const BIRTH_DATE = "2004-06-15";
 const BIRTHDAY_CONTENT = `Dear Santhi,
 
 Happy Birthday.
@@ -32,100 +32,63 @@ function getAge(birthDate: string): number {
   return age;
 }
 
-function getBirthdayCount(birthDate: string): number {
-  const birth = new Date(birthDate);
-  const today = new Date();
-  let count = 0;
-  for (let y = birth.getFullYear(); y <= today.getFullYear(); y++) {
-    const bd = new Date(birth);
-    bd.setFullYear(y);
-    if (bd <= today) count++;
-  }
-  return count;
+function ordinal(n: number): string {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
 export default function BirthdayVaultPage() {
-  const [reading, setReading] = useState<number | null>(null);
-
+  const [reading, setReading] = useState(false);
   const currentAge = useMemo(() => getAge(BIRTH_DATE), []);
-  const birthdayCount = useMemo(() => getBirthdayCount(BIRTH_DATE), []);
-  const birthdays = useMemo(() => {
-    const arr: number[] = [];
-    const birth = new Date(BIRTH_DATE);
-    for (let y = birth.getFullYear(); y <= birth.getFullYear() + birthdayCount - 1; y++) {
-      const bd = new Date(birth);
-      bd.setFullYear(y);
-      if (bd <= new Date()) {
-        const age = y - birth.getFullYear();
-        arr.push(age);
-      }
-    }
-    return arr;
-  }, [birthdayCount]);
+
+  const letter = {
+    id: "birthday",
+    title: `${ordinal(currentAge)} Birthday`,
+    description: `Your ${ordinal(currentAge)} birthday letter from Kingsuk.`,
+    content: `Happy ${ordinal(currentAge)} Birthday, Santhi.\n\n${BIRTHDAY_CONTENT}`,
+    category: "birthday" as const,
+    order: 100,
+  };
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <div className="mb-8">
         <h1 className="text-2xl font-heading text-text">Birthday Vault</h1>
         <p className="text-sm text-secondary mt-1">
-          A letter for every birthday. Each one carries the same message, updated for the age you are.
+          A letter that updates every year on your birthday.
         </p>
       </div>
 
-      <div className="bg-card border border-accent/20 rounded-lg p-6 mb-8 text-center">
-        <p className="text-accent font-heading text-lg">Current Age</p>
-        <p className="text-4xl font-heading text-text mt-2">{currentAge}</p>
-        <p className="text-sm text-secondary mt-1">Happy {currentAge}<sup>th</sup> Birthday, Santhi</p>
+      <div className="bg-card border border-accent/20 rounded-lg p-8 mb-8 text-center">
+        <p className="text-accent font-heading text-lg mb-1">Current Age</p>
+        <p className="text-5xl font-heading text-text">{currentAge}</p>
+        <p className="text-sm text-secondary mt-2">Born {new Date(BIRTH_DATE).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
       </div>
 
-      <div className="grid gap-3">
-        {birthdays.map((age) => {
-          const suffix = age % 10 === 1 && age !== 11 ? "st" : age % 10 === 2 && age !== 12 ? "nd" : age % 10 === 3 && age !== 13 ? "rd" : "th";
-          const content = `Happy ${age}${suffix} Birthday, Santhi.\n\n${BIRTHDAY_CONTENT}`;
-          const letter = {
-            id: `birthday-${age}`,
-            title: `${age}${suffix} Birthday`,
-            description: `Your ${age}${suffix} birthday letter.`,
-            content,
-            category: "birthday" as const,
-            order: 100 + age,
-          };
+      <button
+        onClick={() => setReading(true)}
+        className="bg-card border border-accent/20 hover:border-accent/50 rounded-lg p-6 w-full text-left transition-all duration-300 group cursor-pointer"
+      >
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-heading text-text group-hover:text-accent transition-colors">
+              {ordinal(currentAge)} Birthday Letter
+            </h3>
+            <p className="text-sm text-secondary mt-1">
+              Open this on your birthday. The age updates every year.
+            </p>
+          </div>
+          <span className="text-accent text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+            Open &rarr;
+          </span>
+        </div>
+      </button>
 
-          return (
-            <button
-              key={age}
-              onClick={() => setReading(age)}
-              className="bg-card border border-accent/10 hover:border-accent/40 rounded-lg p-4 text-left transition-all duration-300 group cursor-pointer"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-heading text-text text-sm group-hover:text-accent transition-colors">
-                    {age}{suffix} Birthday
-                  </h3>
-                  <p className="text-xs text-secondary mt-0.5">
-                    A letter from Kingsuk
-                  </p>
-                </div>
-                <span className="text-accent text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                  Open &rarr;
-                </span>
-              </div>
-            </button>
-          );
-        })}
-      </div>
-
-      {reading !== null && (
+      {reading && (
         <LetterReader
-          letter={{
-            id: `birthday-${reading}`,
-            title: `${reading}${reading % 10 === 1 && reading !== 11 ? "st" : reading % 10 === 2 && reading !== 12 ? "nd" : reading % 10 === 3 && reading !== 13 ? "rd" : "th"} Birthday`,
-            description: `Your ${reading}${reading % 10 === 1 && reading !== 11 ? "st" : reading % 10 === 2 && reading !== 12 ? "nd" : reading % 10 === 3 && reading !== 13 ? "rd" : "th"} birthday letter.`,
-            content: `Happy ${reading}${reading % 10 === 1 && reading !== 11 ? "st" : reading % 10 === 2 && reading !== 12 ? "nd" : reading % 10 === 3 && reading !== 13 ? "rd" : "th"} Birthday, Santhi.\n\n${BIRTHDAY_CONTENT}`,
-            category: "birthday",
-            order: 100 + reading,
-          }}
-          onClose={() => setReading(null)}
+          letter={letter}
+          onClose={() => setReading(false)}
         />
       )}
     </div>
