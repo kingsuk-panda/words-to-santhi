@@ -1,4 +1,4 @@
-:HL["/words-to-santhi/_next/static/chunks/01txot~j6vu50.css","style"]
+:HL["/words-to-santhi/_next/static/chunks/0oz31~wou5~gb.css","style"]
 :HL["/words-to-santhi/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/words-to-santhi/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"letters","param":null,"prefetchHints":0,"slots":{"children":{"name":"id","param":{"type":"d","key":"when-you-need-a-brother","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"BsPsWczCFKKw2pt1XK8dy"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"letters","param":null,"prefetchHints":0,"slots":{"children":{"name":"id","param":{"type":"d","key":"when-you-need-a-brother","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"JyowgSu4JMuvkdjgXXSeD"}
