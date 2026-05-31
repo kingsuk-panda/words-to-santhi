@@ -1,9 +1,9 @@
 1:"$Sreact.fragment"
-2:I[69208,["/words-to-santhi/_next/static/chunks/047o2~b4xxk~7.js","/words-to-santhi/_next/static/chunks/17zmohj9wjkmr.js","/words-to-santhi/_next/static/chunks/0nl8jpmmvy6y~.js"],"ClientPageRoot"]
-3:I[17643,["/words-to-santhi/_next/static/chunks/047o2~b4xxk~7.js","/words-to-santhi/_next/static/chunks/17zmohj9wjkmr.js","/words-to-santhi/_next/static/chunks/0nl8jpmmvy6y~.js","/words-to-santhi/_next/static/chunks/0xa1kekunkdxv.js"],"default"]
-6:I[74943,["/words-to-santhi/_next/static/chunks/047o2~b4xxk~7.js","/words-to-santhi/_next/static/chunks/17zmohj9wjkmr.js","/words-to-santhi/_next/static/chunks/0nl8jpmmvy6y~.js"],"OutletBoundary"]
+2:I[69208,["/words-to-santhi/_next/static/chunks/0o9b94y3-kphs.js","/words-to-santhi/_next/static/chunks/0nl8jpmmvy6y~.js","/words-to-santhi/_next/static/chunks/0m.jxf48tz0m..js","/words-to-santhi/_next/static/chunks/17zmohj9wjkmr.js"],"ClientPageRoot"]
+3:I[17643,["/words-to-santhi/_next/static/chunks/0o9b94y3-kphs.js","/words-to-santhi/_next/static/chunks/0nl8jpmmvy6y~.js","/words-to-santhi/_next/static/chunks/0m.jxf48tz0m..js","/words-to-santhi/_next/static/chunks/17zmohj9wjkmr.js","/words-to-santhi/_next/static/chunks/0xa1kekunkdxv.js"],"default"]
+6:I[74943,["/words-to-santhi/_next/static/chunks/0o9b94y3-kphs.js","/words-to-santhi/_next/static/chunks/0nl8jpmmvy6y~.js","/words-to-santhi/_next/static/chunks/0m.jxf48tz0m..js","/words-to-santhi/_next/static/chunks/17zmohj9wjkmr.js"],"OutletBoundary"]
 7:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/words-to-santhi/_next/static/chunks/0xa1kekunkdxv.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"uGsMyf3Z4Zg2S-2Ecl5KK"}
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/words-to-santhi/_next/static/chunks/0xa1kekunkdxv.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"n6XdUd93Q3zUdAlEtolf1"}
 4:{}
 5:"$0:rsc:props:children:0:props:serverProvidedParams:params"
 8:null
