@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import LetterReader from "@/components/LetterReader";
 
-const BIRTH_DATE = "2004-06-15";
+const BIRTH_DATE = "2005-05-31";
 
 const BIRTHDAY_CONTENT = `Dear Santhi,
 
