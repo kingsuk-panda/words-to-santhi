@@ -1,35 +1,40 @@
 "use client";
 
-import { useState, useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 const PASSWORD = "santhihidimbi";
 
 export default function PasswordGate({ children }: { children: ReactNode }) {
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authed, setAuthed] = useState(false);
   const [input, setInput] = useState("");
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    try {
       const stored = sessionStorage.getItem("words-to-santhi-auth");
       if (stored === PASSWORD) {
-        setAuthenticated(true);
+        setAuthed(true);
       }
-    }
+    } catch {}
+    setLoading(false);
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input === PASSWORD) {
-      sessionStorage.setItem("words-to-santhi-auth", input);
-      setAuthenticated(true);
-      setError(false);
+      try {
+        sessionStorage.setItem("words-to-santhi-auth", input);
+      } catch {}
+      window.location.reload();
     } else {
       setError(true);
     }
   };
 
-  if (authenticated) return <>{children}</>;
+  if (loading) return null;
+
+  if (authed) return <>{children}</>;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-bg px-4">
