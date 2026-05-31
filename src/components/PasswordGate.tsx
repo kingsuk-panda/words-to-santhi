@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { getCurrentUser } from "@/lib/storage";
 
-const PASSWORD = "santhihidimbi";
+const PASSWORDS: Record<string, string> = {
+  santhi: "santhihidimbi",
+  kingsuk: "kingsuk",
+};
 
 export default function PasswordGate({ children }: { children: ReactNode }) {
   const [authed, setAuthed] = useState(false);
@@ -12,8 +16,9 @@ export default function PasswordGate({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
+      const user = getCurrentUser();
       const stored = sessionStorage.getItem("words-to-santhi-auth");
-      if (stored === PASSWORD) {
+      if (stored === PASSWORDS[user]) {
         setAuthed(true);
       }
     } catch {}
@@ -22,7 +27,8 @@ export default function PasswordGate({ children }: { children: ReactNode }) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (input === PASSWORD) {
+    const user = getCurrentUser();
+    if (input === PASSWORDS[user]) {
       try {
         sessionStorage.setItem("words-to-santhi-auth", input);
       } catch {}

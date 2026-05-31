@@ -20,6 +20,7 @@ You've made it through every hard day you've ever had. That's not luck. That's y
 Thank you for being in this world. It is better because you are in it.
 
 With all my love, always,
+Your brother,
 Kingsuk`;
 
 function getNextBirthday(birthDate: string): { date: Date; age: number } {

@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import type { Letter } from "@/data/letters";
+import { addOpenedLetter } from "@/lib/storage";
 
 interface Props {
   letter: Letter;
@@ -11,26 +12,15 @@ interface Props {
 export default function LetterReader({ letter, onClose }: Props) {
   const [phase, setPhase] = useState<"envelope" | "opening" | "letter">("envelope");
 
-  const markOpened = useCallback(() => {
-    try {
-      const opened = JSON.parse(localStorage.getItem("opened-letters") || "[]");
-      if (!opened.includes(letter.id)) {
-        opened.push(letter.id);
-        localStorage.setItem("opened-letters", JSON.stringify(opened));
-        window.dispatchEvent(new Event("storage"));
-      }
-    } catch {}
-  }, [letter.id]);
-
   useEffect(() => {
     if (phase === "opening") {
       const t = setTimeout(() => {
         setPhase("letter");
-        markOpened();
-      }, 1200);
+        addOpenedLetter(letter.id);
+      }, 600);
       return () => clearTimeout(t);
     }
-  }, [phase, markOpened]);
+  }, [phase, letter.id]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -54,14 +44,14 @@ export default function LetterReader({ letter, onClose }: Props) {
       aria-label={letter.title}
     >
       {phase === "envelope" && (
-        <div className="text-center animate-fade-in">
+        <div className="text-center animate-scale-in will-change-transform">
           <button
             onClick={() => setPhase("opening")}
             className="group cursor-pointer bg-transparent border-none"
             aria-label="Open letter"
           >
-            <div className="w-48 h-56 sm:w-56 sm:h-64 bg-card rounded-lg border border-accent/30 relative flex items-center justify-center mx-auto transition-all duration-300 group-hover:border-accent group-hover:shadow-lg group-hover:shadow-accent/20">
-              <svg viewBox="0 0 24 24" className="w-16 h-16 text-accent/70 group-hover:text-accent transition-colors" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <div className="w-48 h-56 sm:w-56 sm:h-64 bg-card rounded-lg border border-accent/30 relative flex items-center justify-center mx-auto transition-all duration-300 ease-out group-hover:border-accent group-hover:shadow-xl group-hover:shadow-accent/20 group-hover:scale-105 will-change-transform">
+              <svg viewBox="0 0 24 24" className="w-16 h-16 text-accent/70 group-hover:text-accent transition-colors duration-300" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <rect x="2" y="4" width="20" height="16" rx="2" />
                 <path d="M2 8l10 6 10-6" />
               </svg>
@@ -83,8 +73,8 @@ export default function LetterReader({ letter, onClose }: Props) {
       )}
 
       {phase === "opening" && (
-        <div className="text-center">
-          <div className="w-48 h-56 sm:w-56 sm:h-64 bg-card rounded-lg border border-accent/30 flex items-center justify-center mx-auto animate-envelope-open">
+        <div className="text-center will-change-transform">
+          <div className="w-48 h-56 sm:w-56 sm:h-64 bg-card rounded-lg border border-accent/30 flex items-center justify-center mx-auto animate-envelope-open will-change-transform">
             <svg viewBox="0 0 24 24" className="w-12 h-12 text-accent" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
             </svg>
@@ -93,7 +83,7 @@ export default function LetterReader({ letter, onClose }: Props) {
       )}
 
       {phase === "letter" && (
-        <div className="bg-card border border-accent/30 rounded-lg max-w-2xl w-full max-h-[85vh] overflow-y-auto animate-letter-slide">
+        <div className="bg-card border border-accent/30 rounded-lg max-w-2xl w-full max-h-[85vh] overflow-y-auto animate-letter-slide will-change-transform">
           <div className="sticky top-0 bg-card border-b border-accent/10 flex items-center justify-between p-4">
             <h2 className="text-lg font-heading text-accent pr-4">{letter.title}</h2>
             <button

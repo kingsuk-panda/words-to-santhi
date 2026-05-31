@@ -29,8 +29,9 @@ If you're reading this and you haven't laughed today, stop. Find something. A vi
 
 You're allowed to find joy even on heavy days. Especially on heavy days.
 
-With laughter and friendship,
-Kingsuk`
+With lots of hihihahas,
+Your brooooooooooodaaaahhh,
+Fantastic Kingsuk`
   },
   {
     id: "when-you-feel-alone",
@@ -108,7 +109,7 @@ Feel what you need to feel. Cry if you need to. Be angry. Be sad. Don't skip the
 
 And until then, I've got your back. From wherever I am.
 
-Yours,
+Your bro among bros, not made for hoes,
 Kingsuk`
   },
   {

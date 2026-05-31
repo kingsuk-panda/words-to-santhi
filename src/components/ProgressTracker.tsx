@@ -2,18 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { letters } from "@/data/letters";
+import { getOpenedLetters, getCurrentUser } from "@/lib/storage";
 
 const unlocked = letters.filter((l) => !l.unlockDate || new Date(l.unlockDate) <= new Date());
 
 export default function ProgressTracker() {
   const [opened, setOpened] = useState<string[]>([]);
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     const update = () => {
-      try {
-        const data = JSON.parse(localStorage.getItem("opened-letters") || "[]");
-        setOpened(data);
-      } catch {}
+      setOpened(getOpenedLetters());
+      setUser(getCurrentUser());
     };
     update();
     window.addEventListener("storage", update);
@@ -26,9 +26,10 @@ export default function ProgressTracker() {
 
   return (
     <div className="bg-card rounded-lg border border-accent/20 p-4" role="region" aria-label="Archive progress">
-      <p className="text-sm text-secondary mb-2">
-        Archive Progress
-      </p>
+      <div className="flex items-center justify-between mb-1">
+        <p className="text-sm text-secondary">Archive Progress</p>
+        <span className="text-xs text-accent capitalize">{user}</span>
+      </div>
       <p className="text-lg font-heading text-text">
         {openedCount} of {total} letters opened
       </p>
